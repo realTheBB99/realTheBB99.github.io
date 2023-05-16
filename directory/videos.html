@@ -1,1 +1,159 @@
-<p>Under construction...</p>
+<!DOCTYPE html>
+<html>
+<head>
+<script>/**
+ * Take an RFC 3339 or ISO 8601 date and returns
+ * the date in human readable form.
+ *
+ * Will return undefined if lacks browser support
+ * or it cannot parse the date.
+ *
+ * @param  {string} time
+ * @param  {object} [lang] Optional language object
+ * @return {string|undefined}
+ * @license MIT
+ * @author Sam Clarke <sam@samclarke.com>
+ */
+function timeToWords(time, lang) {
+  lang = lang || {
+    postfixes: {
+      '<': ' ago',
+      '>': ' from now'
+    },
+    1000: {
+      singular: 'a few moments',
+      plural: 'a few moments'
+    },
+    60000: {
+      singular: 'about a minute',
+      plural: '# minutes'
+    },
+    3600000: {
+      singular: 'about an hour',
+      plural: '# hours'
+    },
+    86400000: {
+      singular: 'a day',
+      plural: '# days'
+    },
+    31540000000: {
+      singular: 'a year',
+      plural: '# years'
+    }
+  };
+
+  var timespans = [1000, 60000, 3600000, 86400000, 31540000000];
+  var parsedTime = Date.parse(time.replace(/\-00:?00$/, ''));
+
+  if (parsedTime && Date.now) {
+    var timeAgo = parsedTime - Date.now();
+    var diff = Math.abs(timeAgo);
+    var postfix = lang.postfixes[(timeAgo < 0) ? '<' : '>'];
+    var timespan = timespans[0];
+
+    for (var i = 1; i < timespans.length; i++) {
+      if (diff > timespans[i]) {
+        timespan = timespans[i];
+      }
+    }
+
+    var n = Math.round(diff / timespan);
+
+    return lang[timespan][n > 1 ? 'plural' : 'singular']
+      .replace('#', n) + postfix;
+  }
+}
+
+var norwegian = {
+  postfixes: {
+    '<': ' siden',
+    '>': ' fra nå'
+  },
+  1000: {
+    singular: 'et øyeblikk',
+    plural: 'et øyeblikk'
+  },
+  60000: {
+    singular: 'omtrent et minutt',
+    plural: '# minutter'
+  },
+  3600000: {
+    singular: 'omtrent en time',
+    plural: '# timer'
+  },
+  86400000: {
+    singular: 'en dag',
+    plural: '# dager'
+  },
+  31540000000: {
+    singular: 'et år',
+    plural: '# år'
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  var elements = document.getElementsByTagName('time');
+  for (var i = 0; i < elements.length; i++) {
+    var time = elements[i];
+    // The date should be either in the datetime attribute
+    // or in the text contents if no datetime attribute
+    var date = time.getAttribute('datetime') || time.textContent;
+    var lang = time.className === 'norsk' ? norwegian : null;
+
+    var dateInWords = timeToWords(date, lang);
+    if (dateInWords) {
+      time.textContent = dateInWords;
+    }
+  }
+});
+     </script>
+      <title>Videos -- Directory</title>
+    <meta content="Uncovering the truth behind NDFolfSky." property="og:title" />
+    <meta content="Talking to me is a privilege." property="og:description" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+<style>
+.p {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.center {
+  text-align: center;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 30px;
+}
+
+#rcorners1,
+#rcorners2,
+#rcorners3 {
+  display: inline-block;
+  border-radius: 7px;
+  background: #F2F0F0;
+  padding: 20px;
+  width: 31%; /* Adjust the width as needed */
+  height: 500px;
+  font-family: 'Quicksand', sans-serif;
+  vertical-align: top; /* Align the boxes at the top */
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<p class="center"><strong>Videos:</strong></p>
+<p class="p"><strong>Recently Posted</strong>
+  <p id="rcorners1"><a href="https://www.ndinfo.xyz/directory/video/post1"><img src="https://i.ytimg.com/vi/EOU8N4y8crg/maxresdefault.jpg" alt="Thumbnail Preview" width="500" height="300"></a><br>Video #2<br>Posted <td><time>2023-05-15T20:39:39-0000</time></td> (added to YouTube <td><time>2023-04-03T16:38:57-0000</time></td>)  <br><img src="https://yt3.googleusercontent.com/oIXutvcRF5qfPOsHW2xhq7cs8K_BXTm6YohzqJKgVh0ROQM1VHdu2Otb9POrDGzY6IWp8MTL2qY=s900-c-k-c0x00ffffff-no-rj" alt="Avatar" class="avatar"> Spitfire the Wolf (via YouTube)<br></p>
+
+</body>
+</html>
